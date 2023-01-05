@@ -179,8 +179,8 @@
             }
             # save
             matlabsave(folout+'\'+lumfiles{i}+'_TXY.mat',TXY);
-            matlabsave(folout+'\'+lumfiles{i}+'_TXZ.mat',TXY);#folout+filename+'-rot1-'+num2str(angle2)+'-VARrot2-'+num2str(angle3)+'-scaled'+num2str(sizens(1)*1e7)+'e-1_TXZ.mat',TXZ);
-            matlabsave(folout+'\'+lumfiles{i}+'_TYZ.mat',TXY);#folout+filename+'-rot1-'+num2str(angle2)+'-VARrot2-'+num2str(angle3)+'-scaled'+num2str(sizens(1)*1e7)+'e-1_TYZ.mat',TYZ);
+            matlabsave(folout+'\'+lumfiles{i}+'_TXZ.mat',TXZ);#folout+filename+'-rot1-'+num2str(angle2)+'-VARrot2-'+num2str(angle3)+'-scaled'+num2str(sizens(1)*1e7)+'e-1_TXZ.mat',TXZ);
+            matlabsave(folout+'\'+lumfiles{i}+'_TYZ.mat',TYZ);#folout+filename+'-rot1-'+num2str(angle2)+'-VARrot2-'+num2str(angle3)+'-scaled'+num2str(sizens(1)*1e7)+'e-1_TYZ.mat',TYZ);
                 
         }
 
