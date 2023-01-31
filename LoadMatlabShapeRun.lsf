@@ -15,8 +15,8 @@
 
 
     # inputfolder and # mie scattering project
-    homefolder = "C:\Users\Rox\OneDrive - University of Bristol\Documents\lumerical beb\221201 multi tests";
-    miefil ='C:\Users\Rox\OneDrive - University of Bristol\Documents\lumerical beb\mie_scattering_fdtd_importMatlabNOSYMMETRY';#miefil ='C:\Users\Rox\OneDrive - University of Bristol\Documents\bloom\lumerical\200213Mie\mie_scattering_fdtd_importMatlabRingNOSYMMETRY.fsp';
+    homefolder = "C:\Users\Rox\OneDrive - University of Bristol\Documents\lumerical beb\multiparticleArrayDev\230115test";
+    miefil ='C:\Users\Rox\OneDrive - University of Bristol\Documents\lumerical beb\multiparticleArrayDev\mie_scattering_fdtd_importMatlabNOSYMMETRYmultiWORKS';#'C:\Users\Rox\OneDrive - University of Bristol\Documents\lumerical beb\mie_scattering_fdtd_importMatlabNOSYMMETRY';#miefil ='C:\Users\Rox\OneDrive - University of Bristol\Documents\bloom\lumerical\200213Mie\mie_scattering_fdtd_importMatlabRingNOSYMMETRY.fsp';
     matfolin= homefolder+'\matfiles';
     lumfolout = homefolder + '\lumfiles';
     folout= homefolder +'\output';
@@ -26,7 +26,7 @@
     files = splitstring(dir,endl); files = files{3:length(files)};
     
     #define the varying parameters
-    numbershapes2sweep = length(files);#i
+    numbershapes2sweep = 1;#length(files);#i
     numberpols2sweep = 1;#j
     numbersizes2sweep=1;#k
     
@@ -125,7 +125,7 @@
                         set('sim_y_span', ysp+ 4e-007);#paw+2e-007);
                         set('sim_z_span', zsp+ 4e-007);#paw+2e-007);
                         
-                        lumfilename = filename + '_' +num2str(size_k)+'nm_ang'+num2str(q)+'.fsp';
+                        lumfilename = substring(filename, 1,length(filename)-4) + '_' +num2str(size_k)+'nm_ang'+num2str(q)+'.fsp';
                         
                         save(lumfolout+'\'+lumfilename);
                         #run;
@@ -141,7 +141,7 @@
         lumfiles= splitstring(dir,endl); lumfiles = lumfiles{3:length(lumfiles)};
         
         for (i=1:length(lumfiles)){ 
-        if (findstring(lumfiles{i},"stl") != -1) { 
+        if (findstring(lumfiles{i},"fsp") != -1) { 
             load(lumfiles{i});
         }
             if (!layoutmode) {
@@ -178,9 +178,12 @@
 
             }
             # save
-            matlabsave(folout+'\'+lumfiles{i}+'_TXY.mat',TXY);
-            matlabsave(folout+'\'+lumfiles{i}+'_TXZ.mat',TXZ);#folout+filename+'-rot1-'+num2str(angle2)+'-VARrot2-'+num2str(angle3)+'-scaled'+num2str(sizens(1)*1e7)+'e-1_TXZ.mat',TXZ);
-            matlabsave(folout+'\'+lumfiles{i}+'_TYZ.mat',TYZ);#folout+filename+'-rot1-'+num2str(angle2)+'-VARrot2-'+num2str(angle3)+'-scaled'+num2str(sizens(1)*1e7)+'e-1_TYZ.mat',TYZ);
+            tdat = TXY;
+            matlabsave(folout+'\'+lumfiles{i}+'_TXY.mat',tdat);
+            tdat = TXZ;
+            matlabsave(folout+'\'+lumfiles{i}+'_TXZ.mat',tdat);#folout+filename+'-rot1-'+num2str(angle2)+'-VARrot2-'+num2str(angle3)+'-scaled'+num2str(sizens(1)*1e7)+'e-1_TXZ.mat',TXZ);
+            tdat = TYZ;            
+            matlabsave(folout+'\'+lumfiles{i}+'_TYZ.mat',tdat);#folout+filename+'-rot1-'+num2str(angle2)+'-VARrot2-'+num2str(angle3)+'-scaled'+num2str(sizens(1)*1e7)+'e-1_TYZ.mat',TYZ);
                 
         }
 
