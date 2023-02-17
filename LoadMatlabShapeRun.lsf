@@ -15,7 +15,7 @@
 
 
     # inputfolder and # mie scattering project
-    homefolder = "C:\Users\Rox\OneDrive - University of Bristol\Documents\lumerical beb\multiparticleArrayDev\230115test";
+    homefolder = "C:\Users\Rox\OneDrive - University of Bristol\Documents\lumerical beb\multiparticleArrayDev\230217";
     miefil ='C:\Users\Rox\OneDrive - University of Bristol\Documents\lumerical beb\multiparticleArrayDev\mie_scattering_fdtd_importMatlabNOSYMMETRYmultiWORKS';#'C:\Users\Rox\OneDrive - University of Bristol\Documents\lumerical beb\mie_scattering_fdtd_importMatlabNOSYMMETRY';#miefil ='C:\Users\Rox\OneDrive - University of Bristol\Documents\bloom\lumerical\200213Mie\mie_scattering_fdtd_importMatlabRingNOSYMMETRY.fsp';
     matfolin= homefolder+'\matfiles';
     lumfolout = homefolder + '\lumfiles';
@@ -36,8 +36,8 @@
     numberanglesets2sweep=1;#q
     i=1;j=1;k=1;m=1;n=1;p=1;
     
-    
-    sizes2sweep = linspace(80, 120, numbersizes2sweep)*1e-9;
+    stansize=1*1e-9;
+    sizes2sweep = stansize; #linspace(80, 120, numbersizes2sweep)*1e-9;
     angle1s2sweep = linspace(0,90,numberangle1s2sweep);
     angle2s2sweep = linspace(0,90,numberangle1s2sweep);
     angle3s2sweep = linspace(0,180,numberangle1s2sweep);
@@ -47,8 +47,8 @@
 
     for (i =1:numbershapes2sweep){#length(files)){
         
-        folderin = homefolder; #+'\'+folders{i};  
-        folderout = folderin+'\_out\';#
+        #folderin = homefolder; #+'\'+folders{i};  
+        #folderout = folderin+'\_out\';#
     
             if (findstring(files{i},"stl") != -1) { 
                 load(miefil);
