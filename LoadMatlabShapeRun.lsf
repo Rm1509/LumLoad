@@ -27,20 +27,21 @@
     files = files{3:length(files)};
     
     files = splitstring(dir,endl);        # directory contents in a cell (string) array
-    setind = zeros(length(files));
-    
+    newfiles = cell(length(files)/2);
     k=1;
         for(i=1:length(files)) {           # loop over all files
             if (findstring(files{i},"stl") != -1) {  # look for 'fsp' files
                 if (fileexists(files{i})) {       # check if the file exists (ie. it's a file and not a directory)
                     #?files{i};               # output file name
                     #load(files{i});            # load file
-                    setind(k) = i;
+                    #setind(k) = i;
+                    newfiles{k} = files{i};
                     k=k+1;
+                    
                 }
             }
         }
-        
+        files = newfiles;
         #define the varying parameters
     numbershapes2sweep = 11;#length(files);#i
     numberpols2sweep = 1;#j
@@ -58,10 +59,10 @@
     angle2s2sweep = linspace(0,90,numberangle1s2sweep);
     angle3s2sweep = linspace(0,180,numberangle1s2sweep);
     pols2sweep = linspace(0,90,numberpols2sweep);
-    anglesets2sweep = [45,45,45;45,45,90];
+    anglesets2sweep = [0,0,0];#[45,45,45;45,45,90];
 
 
-    for (i =1:numbershapes2sweep){#length(files)){
+    for (i =9:numbershapes2sweep){#length(files)){
         
         #folderin = homefolder; #+'\'+folders{i};  
         #folderout = folderin+'\_out\';#
@@ -103,9 +104,10 @@
                     select('item1');
                     delete;
                     filename = files{i};
+                    #cd(matfolin)
                     stlimport(matfolin+'\'+filename, size_k);                    
                     set('name','item1');
-                    matlabload(substring(filename, 1,length(filename)-4) + ".mat");
+                    matlabload(matfolin+'\'+substring(filename, 1,length(filename)-4) + ".mat");
                     xlen = volrec(1);ylen = volrec(2);zlen = volrec(3); 
                     xlx = xlen/120; ylx = ylen/237; zlx = zlen/238;
 
@@ -129,21 +131,21 @@
                         
                         # this is to set the simulation size. Because the matlab objects can be anything -
                         # - it would be better to find a way to measure their length and width, this is a guess
-                        xsp = (size_k+0.1e-006);                                                                                              #* 1e-006;
-                        ysp = abs((sin((angle3/360)*2*pi)))*(size_k+0.15e-006)+size_k;#(lolength+0.15e-006)+shwidth;                            #           ysp = (sin((anglech/360)*2*pi))*(shwidth+0.15e-006);
-                        zsp = abs((sin((angle2/360)*2*pi)))*(size_k+0.15e-006)+size_k;                                                       #           zsp = shwidth;#0.15e-006*Npitch;
+                        xsp = xlx*(size_k+0.1e-006);                                                                                              #* 1e-006;
+                        ysp = ylx*abs((sin((angle3/360)*2*pi)))*(size_k+0.15e-006)+size_k;#(lolength+0.15e-006)+shwidth;                            #           ysp = (sin((anglech/360)*2*pi))*(shwidth+0.15e-006);
+                        zsp = zlx*abs((sin((angle2/360)*2*pi)))*(size_k+0.15e-006)+size_k;                                                       #           zsp = shwidth;#0.15e-006*Npitch;
                         ssp = max([xsp,ysp,zsp]);    
                         
-                        set('particle_x_span',  xlx*xsp+ 3.2e-007);#             
-                        set('particle_y_span',  ylx*ysp+ 3.2e-007);#
-                        set('particle_z_span', zlx*zsp+ 3.2e-007);# height
+                        set('particle_x_span',  xsp+ 3.2e-007);#             
+                        set('particle_y_span',  ysp+ 3.2e-007);#
+                        set('particle_z_span', zsp+ 3.2e-007);# height
                         #set('simulation_span', ssp+ 4e-007);#paw+2e-007);
                         #set('particle_x_span', 5.5e-07);set('particle_y_span', 5.5e-07);set('particle_z_span', 5.5e-07);
-                        set('simulation_span', 7.5e-07);   
+                        set('simulation_span', 7.5e-07*ssp);   
                         #set('sim_x_span',        
-                        set('sim_x_span', xlx*xsp+ 4e-007);#paw+2e-007);
-                        set('sim_y_span', ylx*ysp+ 4e-007);#paw+2e-007);
-                        set('sim_z_span', zlx*zsp+ 4e-007);#paw+2e-007);
+                        set('sim_x_span', xsp+ 4e-007);#paw+2e-007);
+                        set('sim_y_span', ysp+ 4e-007);#paw+2e-007);
+                        set('sim_z_span', zsp+ 4e-007);#paw+2e-007);
                         
                         lumfilename = substring(filename, 1,length(filename)-4) + '_' +num2str(size_k)+'nm_ang'+num2str(q)+'.fsp';
                         
