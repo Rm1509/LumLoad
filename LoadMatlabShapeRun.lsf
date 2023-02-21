@@ -15,7 +15,7 @@
 
 
     # inputfolder and # mie scattering project
-    homefolder = "C:\Users\Rox\OneDrive - University of Bristol\Documents\lumerical beb\multiparticleArrayDev\230217";
+    homefolder = "C:\Users\Rox\OneDrive - University of Bristol\Documents\lumerical beb\multiparticleArrayDev\230221test\230221";
     miefil ='C:\Users\Rox\OneDrive - University of Bristol\Documents\lumerical beb\multiparticleArrayDev\mie_scattering_fdtd_importMatlabNOSYMMETRYmultiWORKS';#'C:\Users\Rox\OneDrive - University of Bristol\Documents\lumerical beb\mie_scattering_fdtd_importMatlabNOSYMMETRY';#miefil ='C:\Users\Rox\OneDrive - University of Bristol\Documents\bloom\lumerical\200213Mie\mie_scattering_fdtd_importMatlabRingNOSYMMETRY.fsp';
     matfolin= homefolder+'\matfiles';
     lumfolout = homefolder + '\lumfiles';
@@ -23,10 +23,26 @@
     
     # go to the folder and find the shape files that could be loaded
     cd(matfolin);
-    files = splitstring(dir,endl); files = files{3:length(files)};
+    files = splitstring(dir,endl); 
+    files = files{3:length(files)};
     
-    #define the varying parameters
-    numbershapes2sweep = 1;#length(files);#i
+    files = splitstring(dir,endl);        # directory contents in a cell (string) array
+    setind = zeros(length(files));
+    
+    k=1;
+        for(i=1:length(files)) {           # loop over all files
+            if (findstring(files{i},"stl") != -1) {  # look for 'fsp' files
+                if (fileexists(files{i})) {       # check if the file exists (ie. it's a file and not a directory)
+                    #?files{i};               # output file name
+                    #load(files{i});            # load file
+                    setind(k) = i;
+                    k=k+1;
+                }
+            }
+        }
+        
+        #define the varying parameters
+    numbershapes2sweep = 11;#length(files);#i
     numberpols2sweep = 1;#j
     numbersizes2sweep=1;#k
     
@@ -89,7 +105,11 @@
                     filename = files{i};
                     stlimport(matfolin+'\'+filename, size_k);                    
                     set('name','item1');
-                    setnamed('item1','index',1.48);
+                    matlabload(substring(filename, 1,length(filename)-4) + ".mat");
+                    xlen = volrec(1);ylen = volrec(2);zlen = volrec(3); 
+                    xlx = xlen/120; ylx = ylen/237; zlx = zlen/238;
+
+                   setnamed('item1','index',1.48);
                     setnamed('item1','first axis','x');
                     setnamed('item1','second axis','y');
                     setnamed('item1','third axis','z');
@@ -114,16 +134,16 @@
                         zsp = abs((sin((angle2/360)*2*pi)))*(size_k+0.15e-006)+size_k;                                                       #           zsp = shwidth;#0.15e-006*Npitch;
                         ssp = max([xsp,ysp,zsp]);    
                         
-                        set('particle_x_span',  xsp+ 3.2e-007);#             
-                        set('particle_y_span',  ysp+ 3.2e-007);#
-                        set('particle_z_span', zsp+ 3.2e-007);# height
+                        set('particle_x_span',  xlx*xsp+ 3.2e-007);#             
+                        set('particle_y_span',  ylx*ysp+ 3.2e-007);#
+                        set('particle_z_span', zlx*zsp+ 3.2e-007);# height
                         #set('simulation_span', ssp+ 4e-007);#paw+2e-007);
                         #set('particle_x_span', 5.5e-07);set('particle_y_span', 5.5e-07);set('particle_z_span', 5.5e-07);
                         set('simulation_span', 7.5e-07);   
                         #set('sim_x_span',        
-                        set('sim_x_span', xsp+ 4e-007);#paw+2e-007);
-                        set('sim_y_span', ysp+ 4e-007);#paw+2e-007);
-                        set('sim_z_span', zsp+ 4e-007);#paw+2e-007);
+                        set('sim_x_span', xlx*xsp+ 4e-007);#paw+2e-007);
+                        set('sim_y_span', ylx*ysp+ 4e-007);#paw+2e-007);
+                        set('sim_z_span', zlx*zsp+ 4e-007);#paw+2e-007);
                         
                         lumfilename = substring(filename, 1,length(filename)-4) + '_' +num2str(size_k)+'nm_ang'+num2str(q)+'.fsp';
                         
